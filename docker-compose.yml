@@ -2,6 +2,8 @@ version: '3'
 services:
     web:
         image: nginx:alpine
+        depends_on:
+            - php
         ports:
             - 8081:80
         volumes:
@@ -11,24 +13,17 @@ services:
         networks:
             - nginxphp
     php:
-        image: php:7.2-fpm-alpine
+        build:
+            context: .
+            dockerfile: Dockerfile
         volumes:
             - ./public_html:/public_html
             - ./projects:/projects
+        working_dir: /projects
+        tty: true
         expose:
             - 9000
         networks:
-            - nginxphp
-    composer:
-        image: composer:latest
-        volumes: 
-            - ./public_html:/public_html
-            - ./projects:/projects
-        working_dir: /projects
-        command: ping localhost
-        tty: true
-        stdin_open: true
-        networks: 
             - nginxphp
 networks:
     nginxphp:

@@ -1,0 +1,4 @@
+.idea
+.vscode
+projects/*
+!projects/.gitkeep
